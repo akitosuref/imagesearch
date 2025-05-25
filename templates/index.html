@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Search</title>
     <style>
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .section-title { margin-top: 40px; font-size: 20px; font-weight: bold; }
         .grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -29,13 +32,17 @@
 <body>
     <div class="container">
         <h1>Image Search Demo</h1>
-        
+
         <input type="file" id="uploadInput" accept="image/*" hidden>
         <button class="upload-btn" onclick="document.getElementById('uploadInput').click()">
             Upload Image
         </button>
 
-        <div id="resultsGrid" class="grid"></div>
+        <div class="section-title">Ảnh Tương Tự</div>
+        <div id="topResults" class="grid"></div>
+
+        <div class="section-title">Ảnh Liên Quan</div>
+        <div id="relatedResults" class="grid"></div>
     </div>
 
     <script>
@@ -51,27 +58,43 @@
                     method: 'POST',
                     body: formData
                 });
-                
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
-                displayResults(data.results);
+                displayResults(data.top_results, data.related);
             } catch (error) {
                 console.error('Error:', error);
+                alert('Có lỗi xảy ra. Vui lòng thử lại.');
             }
         });
 
-        function displayResults(imagePaths) {
-            const grid = document.getElementById('resultsGrid');
-            grid.innerHTML = '';
-            
-            imagePaths.forEach(path => {
+        function displayResults(topPaths, relatedPaths) {
+            const topGrid = document.getElementById('topResults');
+            const relatedGrid = document.getElementById('relatedResults');
+            topGrid.innerHTML = '';
+            relatedGrid.innerHTML = '';
+
+            topPaths.forEach(path => {
                 const div = document.createElement('div');
                 div.className = 'image-item';
-                
                 const img = document.createElement('img');
-                img.src = path; // Hoặc endpoint phục vụ ảnh
-                
+                img.src = '/' + path; // Đảm bảo đường dẫn đúng
+                img.alt = "Hình ảnh tương tự"; // Thêm thuộc tính alt
                 div.appendChild(img);
-                grid.appendChild(div);
+                topGrid.appendChild(div);
+            });
+
+            relatedPaths.forEach(path => {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+                const img = document.createElement('img');
+                img.src = '/' + path; // Đảm bảo đường dẫn đúng
+                img.alt = "Hình ảnh liên quan"; // Thêm thuộc tính alt
+                div.appendChild(img);
+                relatedGrid.appendChild(div);
             });
         }
     </script>
