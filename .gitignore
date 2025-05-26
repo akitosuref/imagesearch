@@ -4,3 +4,6 @@ test
 exception
 object
 *.zip
+__pycache__
+*.log
+*.db
