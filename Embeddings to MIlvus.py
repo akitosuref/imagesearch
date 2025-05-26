@@ -55,11 +55,13 @@ def process_images(root_folder: str, batch_size: int = 100):
                     logging.warning(f"Vector không hợp lệ: {file_path}")
                     continue
                 
+               
                 # Thêm vào batch
                 batch_data.append({
                     "vector": embedding,
-                    "filename": file_path
+                    "filename": os.path.relpath(file_path, ".").lstrip("./")
                 })
+
                 
                 # Chèn khi đủ batch size
                 if len(batch_data) >= batch_size:
