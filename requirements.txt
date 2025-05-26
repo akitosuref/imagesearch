@@ -1,0 +1,9 @@
+torch
+pillow
+timm
+scikit-learn
+tqdm
+pymilvus
+fastapi
+jinja2
+uvicorn

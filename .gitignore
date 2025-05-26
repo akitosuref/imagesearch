@@ -7,3 +7,4 @@ object
 __pycache__
 *.log
 *.db
+*.lock

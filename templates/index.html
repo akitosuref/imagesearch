@@ -185,7 +185,8 @@
         if (!response.ok) throw new Error('Lỗi từ server');
 
         const data = await response.json();
-        displayResults(data.very_similar, data.somewhat_similar);
+        
+        displayResults(data.results, data.results);
       } catch (error) {
         console.error('Lỗi:', error);
         alert('Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.');
