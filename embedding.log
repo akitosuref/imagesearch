@@ -671,3 +671,98 @@ pip install python-multipart
 2025-05-25 20:44:32,718 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
 2025-05-25 20:44:32,817 - INFO - DEBUG - Top 5: ['images/10.jpg', 'images/3.jpg', 'images/9.jpg', 'images/8.jpg', 'images/6.jpg']
 2025-05-25 20:44:32,817 - INFO - DEBUG - Related: ['images/5.jpg', 'images/11.jpg', 'images/2.jpg', 'images/train/toyshop/n04462240_7857.JPEG', 'images/12.jpg', 'images/1.jpg', 'images/7.jpg', 'images/train/toyshop/n04462240_10881.JPEG', 'images/train/ski_mask/n04229816_2711.JPEG', 'images/4.jpg', 'images/train/meat_loaf/n07871810_26759.JPEG', 'images/train/lion/n02129165_16.JPEG', 'images/train/orange/n07747607_18447.JPEG', 'images/train/hen-of-the-woods/n13052670_7351.JPEG', 'images/train/basset/n02088238_10422.JPEG']
+2025-05-26 10:13:27,530 - INFO - Xử lý thư mục: ./images
+2025-05-26 10:13:27,819 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:13:28,422 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:13:29,326 - INFO - Đã xóa collection cũ: 'image_embeddings'
+2025-05-26 10:13:29,852 - INFO - Đã tạo collection Milvus: 'image_embeddings'
+2025-05-26 10:13:30,764 - ERROR - Lỗi khi xử lý ./images/exception/test.JPEG: cannot identify image file '/home/cam_tu/udpt/imagesearch/images/exception/test.JPEG'
+2025-05-26 10:14:31,110 - INFO - Đã chèn 1121 ảnh vào Milvus.
+2025-05-26 10:16:09,880 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:16:10,204 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:16:10,422 - INFO - DEBUG - Top 5: ['images/1.jpg', 'images/2.jpg', 'images/4.jpg', 'images/7.jpg', 'images/11.jpg']
+2025-05-26 10:16:10,423 - INFO - DEBUG - Related: ['images/12.jpg', 'images/train/toyshop/n04462240_11243.JPEG', 'images/5.jpg', 'images/6.jpg', 'images/train/cuirass/n03146219_3149.JPEG', 'images/train/cuirass/n03146219_208.JPEG', 'images/train/ski_mask/n04229816_6821.JPEG', 'images/train/toyshop/n04462240_19758.JPEG', 'images/train/cocktail_shaker/n03062245_1019.JPEG', 'images/train/chain_mail/n03000247_2356.JPEG', 'images/train/toyshop/n04462240_20602.JPEG', 'images/train/bicycle-built-for-two/n02835271_21974.JPEG', 'images/train/folding_chair/n03376595_6691.JPEG', 'images/train/apiary/n02727426_948.JPEG', 'images/train/harmonica/n03494278_29999.JPEG']
+2025-05-26 10:24:02,471 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:24:03,202 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:24:03,456 - INFO - DEBUG - Top 5: ['images/1.jpg', 'images/2.jpg', 'images/4.jpg', 'images/7.jpg', 'images/11.jpg']
+2025-05-26 10:24:03,456 - INFO - DEBUG - Related: ['images/12.jpg', 'images/train/toyshop/n04462240_11243.JPEG', 'images/5.jpg', 'images/6.jpg', 'images/train/cuirass/n03146219_3149.JPEG', 'images/train/cuirass/n03146219_208.JPEG', 'images/train/ski_mask/n04229816_6821.JPEG', 'images/train/toyshop/n04462240_19758.JPEG', 'images/train/cocktail_shaker/n03062245_1019.JPEG', 'images/train/chain_mail/n03000247_2356.JPEG', 'images/train/toyshop/n04462240_20602.JPEG', 'images/train/bicycle-built-for-two/n02835271_21974.JPEG', 'images/train/folding_chair/n03376595_6691.JPEG', 'images/train/apiary/n02727426_948.JPEG', 'images/train/harmonica/n03494278_29999.JPEG']
+2025-05-26 10:24:11,694 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:24:11,967 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:24:12,119 - INFO - DEBUG - Top 5: ['images/test/screen/n04152593_33685.JPEG', 'images/train/traffic_light/n06874185_28879.JPEG', 'images/train/remote_control/n04074963_15428.JPEG', 'images/train/scabbard/n04141327_3742.JPEG', 'images/train/strainer/n04332243_12988.JPEG']
+2025-05-26 10:24:12,120 - INFO - DEBUG - Related: ['images/test/traffic_light/n06874185_216.JPEG', 'images/train/safety_pin/n04127249_3657.JPEG', 'images/train/remote_control/n04074963_2964.JPEG', 'images/train/traffic_light/n06874185_41952.JPEG', 'images/train/comic_book/n06596364_4451.JPEG', 'images/train/traffic_light/n06874185_5700.JPEG', 'images/train/traffic_light/n06874185_24794.JPEG', 'images/train/traffic_light/n06874185_9917.JPEG', 'images/train/scabbard/n04141327_205.JPEG', 'images/train/bottlecap/n02877765_1667.JPEG', 'images/train/turnstile/n04501370_3474.JPEG', 'images/train/scabbard/n04141327_1706.JPEG', 'images/test/can_opener/n02951585_15835.JPEG', 'images/train/traffic_light/n06874185_10683.JPEG', 'images/test/police_van/n03977966_37936.JPEG']
+2025-05-26 10:26:52,527 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:26:52,969 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:26:53,506 - INFO - DEBUG - Top 5: ['images/1.jpg', 'images/2.jpg', 'images/4.jpg', 'images/7.jpg', 'images/11.jpg']
+2025-05-26 10:26:53,506 - INFO - DEBUG - Related: ['images/12.jpg', 'images/train/toyshop/n04462240_11243.JPEG', 'images/5.jpg', 'images/6.jpg', 'images/train/cuirass/n03146219_3149.JPEG', 'images/train/cuirass/n03146219_208.JPEG', 'images/train/ski_mask/n04229816_6821.JPEG', 'images/train/toyshop/n04462240_19758.JPEG', 'images/train/cocktail_shaker/n03062245_1019.JPEG', 'images/train/chain_mail/n03000247_2356.JPEG', 'images/train/toyshop/n04462240_20602.JPEG', 'images/train/bicycle-built-for-two/n02835271_21974.JPEG', 'images/train/folding_chair/n03376595_6691.JPEG', 'images/train/apiary/n02727426_948.JPEG', 'images/train/harmonica/n03494278_29999.JPEG']
+2025-05-26 10:27:13,805 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:27:14,501 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:27:14,623 - INFO - DEBUG - Top 5: ['images/1.jpg', 'images/2.jpg', 'images/4.jpg', 'images/7.jpg', 'images/11.jpg']
+2025-05-26 10:27:14,623 - INFO - DEBUG - Related: ['images/12.jpg', 'images/train/toyshop/n04462240_11243.JPEG', 'images/5.jpg', 'images/6.jpg', 'images/train/cuirass/n03146219_3149.JPEG', 'images/train/cuirass/n03146219_208.JPEG', 'images/train/ski_mask/n04229816_6821.JPEG', 'images/train/toyshop/n04462240_19758.JPEG', 'images/train/cocktail_shaker/n03062245_1019.JPEG', 'images/train/chain_mail/n03000247_2356.JPEG', 'images/train/toyshop/n04462240_20602.JPEG', 'images/train/bicycle-built-for-two/n02835271_21974.JPEG', 'images/train/folding_chair/n03376595_6691.JPEG', 'images/train/apiary/n02727426_948.JPEG', 'images/train/harmonica/n03494278_29999.JPEG']
+2025-05-26 10:34:27,553 - INFO - Xử lý thư mục: ./images
+2025-05-26 10:34:27,754 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:34:28,323 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:34:29,589 - INFO - Đã xóa collection cũ: 'image_embeddings'
+2025-05-26 10:34:30,142 - INFO - Đã tạo collection Milvus: 'image_embeddings'
+2025-05-26 10:34:31,090 - ERROR - Lỗi khi xử lý ./images/exception/test.JPEG: cannot identify image file '/home/cam_tu/udpt/imagesearch/images/exception/test.JPEG'
+2025-05-26 10:35:23,373 - INFO - Đã chèn 1121 ảnh vào Milvus.
+2025-05-26 10:35:44,079 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:35:44,396 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:36:02,133 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:36:02,449 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:36:37,958 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:36:38,229 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:39:08,078 - INFO - Xử lý thư mục: ./images
+2025-05-26 10:39:08,271 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:39:08,841 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:39:09,530 - INFO - Đã xóa collection cũ: 'image_embeddings'
+2025-05-26 10:39:08,281 - INFO - Đã tạo collection Milvus: 'image_embeddings'
+2025-05-26 10:39:09,072 - ERROR - Lỗi khi xử lý ./images/exception/test.JPEG: cannot identify image file '/home/cam_tu/udpt/imagesearch/images/exception/test.JPEG'
+2025-05-26 10:40:00,460 - INFO - Đã chèn 1121 ảnh vào Milvus.
+2025-05-26 10:40:21,601 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:40:21,871 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:43:27,750 - INFO - Xử lý thư mục: ./images
+2025-05-26 10:43:27,952 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:43:28,488 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:43:29,113 - INFO - Đã xóa collection cũ: 'image_embeddings'
+2025-05-26 10:43:29,633 - INFO - Đã tạo collection Milvus: 'image_embeddings'
+2025-05-26 10:43:30,396 - ERROR - Lỗi khi xử lý ./images/exception/test.JPEG: cannot identify image file '/home/cam_tu/udpt/imagesearch/images/exception/test.JPEG'
+2025-05-26 10:44:19,707 - INFO - Đã chèn 1121 ảnh vào Milvus.
+2025-05-26 10:44:39,792 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:44:40,054 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:45:00,146 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:45:00,428 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:46:25,771 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:46:26,029 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:55:56,736 - INFO - Xử lý thư mục: ./images
+2025-05-26 10:55:56,946 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:55:57,571 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:55:58,517 - INFO - Đã xóa collection cũ: 'image_embeddings'
+2025-05-26 10:55:59,045 - INFO - Đã tạo collection Milvus: 'image_embeddings'
+2025-05-26 10:56:00,028 - ERROR - Lỗi khi xử lý ./images/exception/test.JPEG: cannot identify image file '/home/cam_tu/udpt/imagesearch/images/exception/test.JPEG'
+2025-05-26 10:56:52,036 - INFO - Đã chèn 1121 ảnh vào Milvus.
+2025-05-26 10:56:58,927 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:56:59,220 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 10:57:29,251 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 10:57:29,547 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:20:58,363 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:20:59,077 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:22:46,544 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:22:46,824 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:22:52,652 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:22:52,915 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:23:44,145 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:23:44,418 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:24:02,249 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:24:02,508 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:24:38,924 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:24:39,203 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:27:19,602 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:27:19,871 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:27:50,148 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:27:50,472 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:29:47,725 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:29:48,482 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:30:09,427 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:30:09,722 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+2025-05-26 11:30:42,130 - INFO - Loading pretrained weights from Hugging Face hub (timm/resnet34.a1_in1k)
+2025-05-26 11:30:42,504 - INFO - [timm/resnet34.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.

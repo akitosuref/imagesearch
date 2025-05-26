@@ -38,7 +38,7 @@ def process_images(root_folder: str, batch_size: int = 100):
 
     for root, _, files in os.walk(root_folder):
         for filename in tqdm(files, desc=f"Processing {os.path.basename(root)}"):
-            if not filename.lower().endswith(('.jpeg', '.jpg', '.png')):
+            if not filename.lower().endswith(('.jpeg', '.jpg', '.png')) or ':' in filename.lower():
                 continue
 
             file_path = os.path.join(root, filename)

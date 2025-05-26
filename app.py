@@ -113,21 +113,24 @@ async def search_image(file: UploadFile):
             )
 
             seen = set()
-            top_results = []
-            related_results = []
+            very_similar = []
+            somewhat_similar = []
 
-            for i, hit in enumerate(results[0]):
+            for hit in results[0]:
                 fname = hit.entity.get("filename")
+                score = hit.score
+
                 if fname and os.path.exists(fname) and fname not in seen:
-                    if len(top_results) < 5:
-                        top_results.append(fname)
-                    else:
-                        related_results.append(fname)
+                    if score > 0.75:
+                        very_similar.append(fname)
+                    elif score > 0.6:
+                        somewhat_similar.append(fname)
                     seen.add(fname)
 
-            logging.info(f"DEBUG - Top 5: {top_results}")
-            logging.info(f"DEBUG - Related: {related_results}")
-            return {"top_results": top_results, "related": related_results}
+            return {
+                "very_similar": very_similar,
+                "somewhat_similar": somewhat_similar
+            }
 
         except Exception as e:
             logging.error(f"Lỗi trong khi tìm kiếm: {e}")
