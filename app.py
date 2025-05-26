@@ -5,8 +5,8 @@ from FeatureExtractor import FeatureExtractor
 from pymilvus import MilvusClient
 from fastapi import FastAPI, UploadFile, Request
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 import tempfile
-import shutil  # Import the shutil module
 
 # Cấu hình logging
 logging.basicConfig(
@@ -17,7 +17,10 @@ logging.basicConfig(
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates") # Đã sửa đường dẫn templates
-
+app.mount("/train", StaticFiles(directory="train"), name="train")
+app.mount("/test", StaticFiles(directory="test"), name="test")
+app.mount("/object", StaticFiles(directory="object"), name="object")
+app.mount("/exception", StaticFiles(directory="exception"), name="exception")
 # Chi tiết kết nối Milvus (được chuyển thành hằng số để dễ sửa đổi)
 MILVUS_URI = "example.db"  # Sử dụng Milvus Lite
 
@@ -79,7 +82,7 @@ def process_and_insert_images(root_folder: str, batch_size: int = 100):
 
                 batch_data.append({
                     "vector": embedding,
-                    "filename": file_path
+                    "filename": os.path.relpath(file_path, ".")  # Sửa ở đây
                 })
 
                 if len(batch_data) >= batch_size:
