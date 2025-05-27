@@ -13,7 +13,7 @@ logging.basicConfig(
 
 def create_collection_if_not_exists(client: MilvusClient):
     """Tạo collection nếu chưa tồn tại"""
-    if "image_embeddings" not in client.list_collections():
+    if not client.has_collection("image_embeddings"):
         client.create_collection(
             collection_name="image_embeddings",
             dimension=512,
@@ -24,39 +24,42 @@ def create_collection_if_not_exists(client: MilvusClient):
         logging.info("Đã tạo collection 'image_embeddings'")
 
 def process_images(root_folder: str, batch_size: int = 100):
+    """Xử lý và chèn ảnh vào Milvus theo batch"""
+    
+    # Khởi tạo components
     extractor = FeatureExtractor("resnet34")
-    client = MilvusClient(uri="tcp://127.0.0.1:19530")
-
-    if "image_embeddings" in client.list_collections():
-        client.drop_collection(collection_name="image_embeddings")
-        logging.info("Đã xoá collection cũ để tránh trùng lặp.")
-
+    client = MilvusClient(uri="example.db")  # Sử dụng Milvus Lite
+    
+    # Đảm bảo collection tồn tại
     create_collection_if_not_exists(client)
     
+    # Batch processing
     batch_data = []
     total_files = 0
-
+    
+    # Duyệt qua tất cả file ảnh
     for root, _, files in os.walk(root_folder):
         for filename in tqdm(files, desc=f"Processing {os.path.basename(root)}"):
-            if not filename.lower().endswith(('.jpeg', '.jpg', '.png')) or ':' in filename.lower():
+            # Kiểm tra định dạng file
+            if not filename.lower().endswith(('.jpeg', '.jpg', '.png')):
                 continue
-
+                
             file_path = os.path.join(root, filename)
             
             try:
+                # Trích xuất embedding
                 embedding = extractor(file_path)
                 
+                # Validate embedding
                 if embedding.shape[0] != 512:
                     logging.warning(f"Vector không hợp lệ: {file_path}")
                     continue
                 
-               
                 # Thêm vào batch
                 batch_data.append({
                     "vector": embedding,
-                    "filename": os.path.relpath(file_path, ".").lstrip("./")
+                    "filename": file_path
                 })
-
                 
                 # Chèn khi đủ batch size
                 if len(batch_data) >= batch_size:
@@ -68,14 +71,22 @@ def process_images(root_folder: str, batch_size: int = 100):
             except Exception as e:
                 logging.error(f"Lỗi xử lý {file_path}: {str(e)}")
                 continue
-
+            
+    
+    # Chèn phần dữ liệu còn lại
     if batch_data:
         client.insert("image_embeddings", batch_data)
         total_files += len(batch_data)
         logging.info(f"Hoàn thành! Tổng file đã xử lý: {total_files}")
 
 if __name__ == "__main__":
-    folders = ["./images", "./images/train", "./images/exception", "./images/object", "./images/test"]
+    # Xử lý tất cả thư mục
+    folders = [
+        "./exception",
+        "./object", 
+        "./test",
+        "./train"
+    ]
     
     for folder in folders:
         if os.path.exists(folder):
