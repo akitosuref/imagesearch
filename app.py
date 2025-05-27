@@ -135,10 +135,14 @@ async def search_image(file: UploadFile):
                 for hit in results[0]
                 if hit.entity.get("filename") and os.path.exists(hit.entity.get("filename")) # Kiểm tra xem file có tồn tại không
             ]
-            return {"results": valid_results}
+            return {
+                "very_similar": valid_results[:1],
+                "somewhat_similar": valid_results[1:]
+            }
         except Exception as e:
             logging.error(f"Lỗi trong quá trình tìm kiếm: {e}")
-            return {"error": str(e)}, 500  # Trả về phản hồi lỗi phù hợp
+            from fastapi.responses import JSONResponse
+            return JSONResponse(status_code=500, content={"error": str(e)})
         finally:
             # Đảm bảo tệp tạm thời bị xóa *sau khi* chúng ta dùng xong
             os.unlink(tmp_path)

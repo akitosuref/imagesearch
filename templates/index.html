@@ -185,8 +185,10 @@
         if (!response.ok) throw new Error('Lỗi từ server');
 
         const data = await response.json();
-        
-        displayResults(data.results, data.results);
+        // Hiển thị đúng hai nhóm kết quả, kiểm tra trường hợp không có kết quả
+        const very = Array.isArray(data.very_similar) ? data.very_similar : [];
+        const some = Array.isArray(data.somewhat_similar) ? data.somewhat_similar : [];
+        displayResults(very, some);
       } catch (error) {
         console.error('Lỗi:', error);
         alert('Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.');
