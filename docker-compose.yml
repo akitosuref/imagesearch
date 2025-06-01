@@ -1,0 +1,82 @@
+services:
+  milvus-etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: milvus-etcd
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+
+  milvus-minio:
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    container_name: milvus-minio
+    command: server /data
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    ports:
+      - "9000:9000"
+    volumes:
+      - minio_data:/data
+
+  milvus:
+    image: milvusdb/milvus:v2.3.9
+    container_name: milvus
+    depends_on:
+      - milvus-etcd
+      - milvus-minio
+    environment:
+      - ETCD_ENDPOINTS=milvus-etcd:2379
+      - MINIO_ADDRESS=milvus-minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MILVUS_CLUSTER_ENABLED=true
+      - MILVUS_REPLICA_NUMBER=2
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+
+  fastapi1:
+    build: .
+    container_name: fastapi1
+    command: uvicorn app:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - milvus
+
+  fastapi2:
+    build: .
+    container_name: fastapi2
+    command: uvicorn app:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    depends_on:
+      - milvus
+
+  fastapi3:
+    build: .
+    container_name: fastapi3
+    command: uvicorn app:app --host 0.0.0.0 --port 8002
+    ports:
+      - "8002:8002"
+    depends_on:
+      - milvus
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - fastapi1
+      - fastapi2
+      - fastapi3
+
+volumes:
+  minio_data:

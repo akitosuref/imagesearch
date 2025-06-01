@@ -18,6 +18,32 @@ logging.basicConfig(
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+import requests
+import socket
+
+# Lấy IP nội bộ của container (dùng cho Docker network)
+def get_internal_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("10.255.255.255", 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = "127.0.0.1"
+    finally:
+        s.close()
+    return IP
+
+@app.get("/call_node")
+async def call_other_node(node_host: str = "fastapi2", node_port: int = 8001):
+    """
+    Gọi API sang node FastAPI khác qua Docker network.
+    """
+    try:
+        url = f"http://{node_host}:{node_port}/health"
+        resp = requests.get(url, timeout=3)
+        return {"target": url, "status_code": resp.status_code, "data": resp.json()}
+    except Exception as e:
+        return {"error": str(e)}
 app.mount("/train", StaticFiles(directory="./images/train"), name="train")
 
 MILVUS_URI = "example.db"  # Sử dụng Milvus Lite
@@ -146,6 +172,50 @@ async def search_image(file: UploadFile):
         finally:
             # Đảm bảo tệp tạm thời bị xóa *sau khi* chúng ta dùng xong
             os.unlink(tmp_path)
+@app.post("/search_safe")
+async def search_image_safe(file: UploadFile):
+    """
+    Tìm kiếm ảnh, tự động tạo collection nếu chưa tồn tại.
+    """
+    client = get_milvus_client()
+    extractor = FeatureExtractor("resnet34")
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        try:
+            content = await file.read()
+            tmp_file.write(content)
+            tmp_path = tmp_file.name
+
+            embedding = extractor(tmp_path)
+            # Kiểm tra collection, tạo nếu chưa có
+            if not client.has_collection(COLLECTION_NAME):
+                client.create_collection(
+                    collection_name=COLLECTION_NAME,
+                    dimension=512,
+                    auto_id=True,
+                    vector_field_name="vector",
+                    metric_type="COSINE"
+                )
+            results = client.search(
+                collection_name=COLLECTION_NAME,
+                data=[embedding],
+                output_fields=["filename"],
+                limit=10
+            )
+            valid_results = [
+                hit.entity.get("filename")
+                for hit in results[0]
+                if hit.entity.get("filename") and os.path.exists(hit.entity.get("filename"))
+            ]
+            return {
+                "very_similar": valid_results[:1],
+                "somewhat_similar": valid_results[1:]
+            }
+        except Exception as e:
+            logging.error(f"Lỗi trong quá trình tìm kiếm: {e}")
+            from fastapi.responses import JSONResponse
+            return JSONResponse(status_code=500, content={"error": str(e)})
+        finally:
+            os.unlink(tmp_path)
 
 @app.get("/")
 async def main(request: Request):
@@ -155,7 +225,18 @@ async def main(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 def create_milvus_collection():
-    raise NotImplementedError
+    client = get_milvus_client()
+    if not client.has_collection(COLLECTION_NAME):
+        client.create_collection(
+            collection_name=COLLECTION_NAME,
+            dimension=512,
+            auto_id=True,
+            vector_field_name="vector",
+            metric_type="COSINE"
+        )
+        logging.info(f"Đã tạo collection Milvus: '{COLLECTION_NAME}'")
+    else:
+        logging.info(f"Collection '{COLLECTION_NAME}' đã tồn tại")
 
 def initialize_milvus():
     try:
@@ -172,3 +253,30 @@ if __name__ == "__main__":
     # Start the FastAPI application using uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
     
+
+@app.get("/health")
+async def health_check():
+    """
+    Endpoint kiểm tra tình trạng hệ thống.
+    """
+    try:
+        client = get_milvus_client()
+        status = client.list_collections()
+        return {"status": "ok", "milvus_collections": status}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+@app.get("/log")
+async def get_log(lines: int = 100):
+    """
+    Xem nhanh log hệ thống (embedding.log).
+    """
+    log_path = "embedding.log"
+    if not os.path.exists(log_path):
+        return {"error": "Log file không tồn tại"}
+    try:
+        with open(log_path, "r", encoding="utf-8") as f:
+            all_lines = f.readlines()
+            last_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
+        return {"log": "".join(last_lines)}
+    except Exception as e:
+        return {"error": str(e)}

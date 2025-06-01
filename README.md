@@ -22,6 +22,15 @@ pip install -r requirements.txt
 ```bash
 uvicorn app:app --reload
 ```
+## Khả năng chịu lỗi (Fault Tolerance)
+
+- **Milvus**: Đã bật chế độ cluster và replication (`MILVUS_CLUSTER_ENABLED=true`, `MILVUS_REPLICA_NUMBER=2`) trong `docker-compose.yml`. Nếu một node Milvus gặp sự cố, dữ liệu vẫn còn trên node khác.
+- **FastAPI**: Chạy nhiều instance FastAPI (`fastapi1`, `fastapi2`). Nếu một container chết, container còn lại vẫn phục vụ được.
+- **Nginx**: Đóng vai trò reverse proxy, phân phối request đến các instance FastAPI, đảm bảo tính sẵn sàng cao.
+
+**Lưu ý:**  
+- Để kiểm tra hoặc thay đổi số lượng replica của Milvus, chỉnh sửa biến môi trường `MILVUS_REPLICA_NUMBER` trong file `docker-compose.yml`.
+- Có thể mở rộng thêm instance FastAPI bằng cách khai báo thêm service tương tự trong `docker-compose.yml`.
 
 ## Đóng góp
 - Chuẩn hóa tên file theo PEP8.

@@ -1,0 +1,9 @@
+images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.csv
+.git
+__pycache__/
