@@ -13,11 +13,15 @@
 - `templates/`: Giao diện web (HTML)
 - `requirements.txt`: Danh sách thư viện Python cần thiết
 
-## Cài đặt
+## Cài đặt các thư viện cần thiết 
 ```bash
 pip install -r requirements.txt
 ```
+## Chạy file embeddings_to_milvus.py 
+```bash
+python3 embedding_to_milvus.py
 
+```
 ## Chạy ứng dụng
 ```bash
 uvicorn app:app --reload
@@ -32,10 +36,7 @@ uvicorn app:app --reload
 - Để kiểm tra hoặc thay đổi số lượng replica của Milvus, chỉnh sửa biến môi trường `MILVUS_REPLICA_NUMBER` trong file `docker-compose.yml`.
 - Có thể mở rộng thêm instance FastAPI bằng cách khai báo thêm service tương tự trong `docker-compose.yml`.
 
-## Đóng góp
-- Chuẩn hóa tên file theo PEP8.
-- Đảm bảo cập nhật requirements.txt khi thêm thư viện mới.
-- Viết code rõ ràng, có chú thích.
+
 
 ## Liên hệ
 - Tác giả:Vương Quang Quý & Hoàng Cẩm Tú
