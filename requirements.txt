@@ -7,3 +7,4 @@ pymilvus
 fastapi
 jinja2
 uvicorn
+flask

@@ -19,6 +19,16 @@ logging.basicConfig(
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 import requests
+
+# Tự động khởi tạo collection Milvus khi app khởi động
+try:
+    from contextlib import suppress
+    with suppress(Exception):
+        from app import initialize_milvus
+        initialize_milvus()
+except Exception:
+    pass
+
 import socket
 
 # Lấy IP nội bộ của container (dùng cho Docker network)
@@ -252,8 +262,6 @@ if __name__ == "__main__":
     
     # Start the FastAPI application using uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-    
-
 @app.get("/health")
 async def health_check():
     """
@@ -280,3 +288,12 @@ async def get_log(lines: int = 100):
         return {"log": "".join(last_lines)}
     except Exception as e:
         return {"error": str(e)}
+
+from flask import send_from_directory
+import os
+
+from fastapi.responses import FileResponse
+
+@app.get("/favicon.ico")
+async def favicon():
+    return FileResponse("static/favicon.ico")

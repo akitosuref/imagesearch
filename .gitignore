@@ -8,3 +8,6 @@ __pycache__
 *.log
 *.db
 *.lock
+train3
+train2
+train1

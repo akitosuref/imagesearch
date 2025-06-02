@@ -26,6 +26,28 @@ python3 embedding_to_milvus.py
 ```bash
 uvicorn app:app --reload
 ```
+
+## Chạy bằng Docker
+
+**Lưu ý:**
+Trước khi chạy Docker, bạn cần chạy lệnh embedding để nạp dữ liệu vào Milvus:
+```bash
+python3 embeddings_to_milvus.py
+```
+
+```bash
+# Build và khởi động toàn bộ hệ thống (Milvus, FastAPI, Nginx)
+docker-compose up --build
+
+# Nếu muốn chạy nền 
+docker-compose up -d
+
+# Kiểm tra trạng thái các container
+docker-compose ps
+
+# Dừng toàn bộ hệ thống
+docker-compose down
+```
 ## Khả năng chịu lỗi (Fault Tolerance)
 
 - **Milvus**: Đã bật chế độ cluster và replication (`MILVUS_CLUSTER_ENABLED=true`, `MILVUS_REPLICA_NUMBER=2`) trong `docker-compose.yml`. Nếu một node Milvus gặp sự cố, dữ liệu vẫn còn trên node khác.
