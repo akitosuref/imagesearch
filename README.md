@@ -13,6 +13,15 @@
 - `templates/`: Giao diện web (HTML)
 - `requirements.txt`: Danh sách thư viện Python cần thiết
 
+## Hướng dẫn thêm dữ liệu train
+
+Để thêm nhanh toàn bộ dữ liệu train cho các tập train1; train2 và train3, sử dụng lệnh sau trong terminal:
+```bash
+cp -r images/train images/train2
+cp -r images/train images/train2 && cp -r images/train images/train3
+```
+Lệnh này sẽ sao chép toàn bộ thư mục `images/train` sang `images/train1` ;`images/train2` và `images/train3`.
+
 ## Cài đặt các thư viện cần thiết 
 ```bash
 pip install -r requirements.txt
