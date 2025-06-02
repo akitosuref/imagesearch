@@ -125,7 +125,7 @@ docker-compose down
    - Nếu có thời gian, nhóm sẽ bổ sung dashboard hoặc API hiển thị trạng thái leader, các node follower và lịch sử chuyển đổi leader để dễ giám sát, debug.
 
 11. **Hoạt động đa máy**
-    - Dự án hỗ trợ triển khai trên nhiều máy vật lý bằng cách sử dụng Docker network overlay hoặc cấu hình host network.
-    - Khi triển khai thực tế, chỉ cần các máy cùng tham gia vào một mạng Docker overlay (Swarm hoặc Kubernetes), các container FastAPI, Milvus, Nginx sẽ tự động nhận diện và giao tiếp qua HTTP.
+    - Dự án hỗ trợ triển khai trên nhiều máy vật lý bằng cách sử dụng Docker 
+    - Khi triển khai thực tế, chỉ cần các máy cùng tham gia vào một mạng Docker overlay , các container FastAPI, Milvus, Nginx sẽ tự động nhận diện và giao tiếp qua HTTP.s
     - Điều này giúp mở rộng hệ thống dễ dàng, tăng khả năng chịu tải và đảm bảo tính sẵn sàng cao.
     - Nếu có thời gian, nhóm sẽ xây dựng tài liệu hướng dẫn chi tiết triển khai đa máy và kịch bản kiểm thử thực tế trên nhiều node vật lý.
