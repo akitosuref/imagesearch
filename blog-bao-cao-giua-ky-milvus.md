@@ -20,38 +20,51 @@ Xây dựng hệ thống tìm kiếm sản phẩm tương tự dựa trên ảnh
 
 ---
 
-### 🏗️ Tổng quan kiến trúc & thành phần dự án
+### 🏗️ Giải thích các thành phần chính trong hệ thống
 
-#### 1. Kiến trúc tổng thể
+#### 1. Máy chủ ứng dụng (FastAPI)
+- **Vai trò:** Nhận yêu cầu từ người dùng (upload ảnh, tìm kiếm), trích xuất đặc trưng ảnh, truy vấn Milvus, trả về kết quả.
+- **Cách hoạt động:** Khi người dùng upload ảnh, FastAPI sử dụng mô hình ResNet34 để trích xuất vector đặc trưng, sau đó gửi truy vấn tìm kiếm đến Milvus để lấy các ảnh tương tự nhất.
 
-- **Milvus Lite**: Vector database lưu trữ embedding ảnh, hỗ trợ tìm kiếm gần đúng (ANN) với cosine similarity.
-- **FastAPI**: API server xử lý upload, tìm kiếm ảnh, log, health check.
-- **Nginx**: Reverse proxy, cân bằng tải giữa nhiều node FastAPI.
-- **Docker Compose**: Quản lý toàn bộ vòng đời service, hỗ trợ mở rộng, chịu lỗi, triển khai đa máy.
-- **MinIO & Etcd**: Lưu trữ đối tượng và quản lý cluster cho Milvus (cấu hình sẵn, nhưng project dùng Milvus Lite).
+#### 2. Cơ sở dữ liệu vector (Milvus Lite)
+- **Vai trò:** Lưu trữ các vector đặc trưng của ảnh và tên file ảnh.
+- **Cách hoạt động:** Khi nhận truy vấn từ FastAPI, Milvus sử dụng thuật toán Approximate Nearest Neighbor (ANN) với metric cosine similarity để tìm ra các vector gần nhất trong không gian vector.
+- **Replication:** Nếu dùng Milvus cluster (project hiện tại dùng Milvus Lite), dữ liệu sẽ được sao chép giữa các node theo cấu hình `MILVUS_REPLICA_NUMBER`. Khi một node gặp sự cố, node khác vẫn giữ dữ liệu mới nhất.
+- **Sharding:** Trong [`MilvusCollection.py`](MilvusCollection.py:1), có cấu hình sharding theo trường `uploader` (partition_key_field). Nếu triển khai cluster, dữ liệu sẽ được phân chia giữa các node dựa trên giá trị trường này, giúp tăng khả năng mở rộng và tối ưu truy vấn.
 
-#### 2. Pipeline xử lý dữ liệu
+#### 3. Reverse Proxy & Load Balancer (Nginx)
+- **Vai trò:** Phân phối đều các request từ client đến nhiều instance FastAPI, đảm bảo hệ thống chịu tải tốt và sẵn sàng cao.
+- **Cách hoạt động:** Nginx nhận request HTTP từ người dùng, chuyển tiếp đến một trong các container FastAPI (fastapi1, fastapi2, fastapi3) theo thuật toán round-robin.
 
-- **Trích xuất đặc trưng ảnh**:  
-  Sử dụng [`FeatureExtractor.py`](FeatureExtractor.py:1) với mô hình ResNet34 (timm, torch), ảnh được chuyển thành vector 512 chiều, chuẩn hóa L2.
-- **Nạp dữ liệu vào Milvus**:  
-  Script [`embeddings_to_milvus.py`](embeddings_to_milvus.py:1) duyệt thư mục ảnh, trích xuất vector và insert vào Milvus theo batch.
-- **Lưu trữ & truy vấn vector**:  
-  Milvus lưu vector, tên file, hỗ trợ sharding theo uploader ([`MilvusCollection.py`](MilvusCollection.py:1)). API `/search` nhận ảnh upload, truy vấn top-10 ảnh gần nhất theo cosine similarity.
-- **Giao diện người dùng**:  
-  Giao diện web hiện đại ([`templates/index.html`](templates/index.html:1)), upload ảnh, xem kết quả trực quan.
+#### 4. Docker Compose & Multi-container
+- **Vai trò:** Quản lý vòng đời các service (FastAPI, Milvus, Nginx, MinIO, Etcd), hỗ trợ mở rộng, tự động khởi động lại khi lỗi.
+- **Cách hoạt động:** Chỉ cần một lệnh `docker-compose up`, toàn bộ hệ thống sẽ được khởi động đồng bộ, các service liên kết với nhau qua mạng nội bộ Docker.
 
-#### 3. Kiểm thử tải & khả năng chịu lỗi
+#### 5. Giao diện người dùng (HTML/Jinja2)
+- **Vai trò:** Cho phép người dùng upload ảnh, xem kết quả tìm kiếm trực quan.
+- **Cách hoạt động:** Khi người dùng upload ảnh, giao diện gửi request đến API `/search`, nhận kết quả và hiển thị các ảnh tương tự.
 
-- Script [`stress_test.sh`](stress_test.sh:1) mô phỏng nhiều client gửi request đồng thời đến API `/search` qua Nginx.
-- FastAPI ghi log chi tiết, có endpoint `/log` để xem nhanh log hệ thống.
-- Docker Compose cấu hình `restart: always`, các service tự động khởi động lại khi gặp sự cố.
+#### 6. Kiểm thử tải (stress_test.sh)
+- **Vai trò:** Mô phỏng nhiều client gửi request đồng thời để kiểm tra khả năng chịu tải của hệ thống.
+- **Cách hoạt động:** Script chạy nhiều tiến trình, mỗi tiến trình gửi nhiều request upload ảnh đến API `/search` qua Nginx.
 
-#### 4. Cân bằng tải, mở rộng & tính sẵn sàng
+---
 
-- Nginx reverse proxy ([`nginx.conf`](nginx.conf:1)) cân bằng tải giữa các node FastAPI.
-- Milvus bật cluster, replication (`MILVUS_CLUSTER_ENABLED=true`, `MILVUS_REPLICA_NUMBER=2`), leader election với etcd (cấu hình sẵn, project thực tế dùng Milvus Lite).
-- Hệ thống hỗ trợ triển khai đa máy vật lý qua Docker network overlay.
+### 🔗 Giao thức giao tiếp giữa các thành phần
+
+- **HTTP/REST:** Giao tiếp giữa client (trình duyệt) và FastAPI, giữa Nginx và các node FastAPI đều dùng HTTP.
+- **gRPC/Thư viện nội bộ:** Milvus Lite được truy cập qua thư viện Python, không dùng giao thức mạng ngoài (nếu dùng Milvus cluster sẽ dùng gRPC).
+- **Docker network:** Các container giao tiếp nội bộ qua mạng Docker.
+
+---
+
+### ⚙️ Logic hoạt động & thuật toán
+
+- **Trích xuất đặc trưng:** Sử dụng ResNet34 pretrained (timm, torch), ảnh được chuyển thành vector 512 chiều, chuẩn hóa L2.
+- **Tìm kiếm gần đúng (ANN):** Milvus sử dụng thuật toán Approximate Nearest Neighbor (ANN) với cosine similarity để tìm top-k vector gần nhất.
+- **Replication:** Nếu dùng cluster, Milvus sẽ đồng bộ dữ liệu giữa các node replica. Khi ghi dữ liệu, node primary sẽ gửi bản sao đến các node replica, đảm bảo tính nhất quán và sẵn sàng.
+- **Sharding:** Nếu bật partition_key_field, dữ liệu sẽ được chia nhỏ giữa các node dựa trên giá trị trường này (ví dụ uploader), giúp cân bằng tải lưu trữ và truy vấn.
+- **Load balancing:** Nginx sử dụng thuật toán round-robin để phân phối request đến các node FastAPI.
 
 ---
 
@@ -79,28 +92,9 @@ Xây dựng hệ thống tìm kiếm sản phẩm tương tự dựa trên ảnh
 
 ---
 
-### 🚀 Ứng dụng thực tế của hệ thống
-
-- 🔍 Tìm kiếm sản phẩm tương tự dựa trên ảnh
-
-
----
-
-### 🔎 Đánh giá tiêu chí hệ thống phân tán
-
-- **Scalability:** Thêm nhiều node FastAPI, Milvus dễ dàng qua Docker Compose.
-- **Fault Tolerance:** Milvus replication (nếu dùng cluster), nhiều instance FastAPI, Nginx tự động chuyển request khi node lỗi.
-- **Availability:** Nginx reverse proxy đảm bảo dịch vụ luôn online, Docker tự động restart container khi lỗi.
-- **Transparency:** Người dùng chỉ tương tác qua API/giao diện web, không cần biết bên dưới có bao nhiêu node.
-- **Concurrency & Parallelism:** FastAPI xử lý đồng thời nhiều request, script stress test mô phỏng nhiều client truy cập cùng lúc.
-- **Replication:** Milvus cluster đồng bộ dữ liệu giữa các node (nếu dùng cluster), đảm bảo không mất mát khi một node gặp sự cố.
-- **Load Balancer:** Nginx phân phối đều request đến các node FastAPI.
-- **Leader Election:** Milvus sử dụng etcd để tự động bầu chọn leader (nếu dùng cluster).
-
----
-
 ### 📝 Kết luận
 
 Dự án đã vận dụng thành công các nguyên lý của hệ thống phân tán: mở rộng linh hoạt, chịu lỗi, sẵn sàng cao, đảm bảo nhất quán dữ liệu và trải nghiệm người dùng liền mạch. Các thành phần như Milvus, FastAPI, Nginx, Docker Compose phối hợp chặt chẽ, minh họa rõ nét cho kiến trúc ứng dụng phân tán hiện đại.
 
 **Tác giả:** Vương Quang Quý & Hoàng Cẩm Tú  
+
