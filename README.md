@@ -75,10 +75,6 @@ docker-compose down
 - Để kiểm tra hoặc thay đổi số lượng replica của Milvus, chỉnh sửa biến môi trường `MILVUS_REPLICA_NUMBER` trong file `docker-compose.yml`.
 - Có thể mở rộng thêm instance FastAPI bằng cách khai báo thêm service tương tự trong `docker-compose.yml`.
 
-
-
-## Liên hệ
-- Tác giả:Vương Quang Quý & Hoàng Cẩm Tú
 ## Đánh giá các tiêu chí hệ thống phân tán
 
 1. **Fault Tolerance**  
@@ -129,3 +125,7 @@ docker-compose down
     - Khi triển khai thực tế, chỉ cần các máy cùng tham gia vào một mạng Docker overlay (Swarm hoặc Kubernetes), các container FastAPI, Milvus, Nginx sẽ tự động nhận diện và giao tiếp qua HTTP.
     - Điều này giúp mở rộng hệ thống dễ dàng, tăng khả năng chịu tải và đảm bảo tính sẵn sàng cao.
     - Nếu có thời gian, nhóm sẽ xây dựng tài liệu hướng dẫn chi tiết triển khai đa máy và kịch bản kiểm thử thực tế trên nhiều node vật lý.
+
+
+## Liên hệ
+- Tác giả:Vương Quang Quý & Hoàng Cẩm Tú
